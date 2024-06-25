@@ -40,8 +40,8 @@ initial(R_v) <- R_v_ini
 initial(D_s) <- D_s_ini
 initial(D_v) <- D_v_ini
 initial(Cum_vax) <- Cum_vax_ini
-initial(Cum_inf_v) <- Cum_inf_v_ini
-initial(Cum_inf_s) <- Cum_inf_s_ini
+initial(Cum_inf_v) <- Cum_inf_ini_v
+initial(Cum_inf_s) <- Cum_inf_ini_s
 
 ## User defined parameters - default in parentheses:
 S_s_ini <- user(1000) 
@@ -53,8 +53,8 @@ R_v_ini <- user(0)
 D_s_ini <- user(0)
 D_v_ini <- user(0)
 Cum_vax_ini <- user(0)
-Cum_inf_v_ini <- user(0)
-Cum_inf_s_ini <- user(0)
+Cum_inf_ini_v <- user(0)
+Cum_inf_ini_s <- user(0)
 
 beta <- user(0.4)   # effective contact
 gamma <- user(0.07) # recovery rate

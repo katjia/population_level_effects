@@ -28,7 +28,7 @@ df_IE_infection_case1 <- df_pY_pD_case1 %>%
 plot_IE_infection_case1 <- ggplot() +
   geom_line(data = df_IE_infection_case1, aes(x = t, y= IE_infection, lty = as.factor(VE_infection))) +
   labs(tag = "A(i)",
-       y=bquote('IIE'^'Inf'*'('*t*','*0*','*0.7*')'),
+       y=bquote('IIE'^'infection'*'('*t*','*0*','*0.7*')'),
        x="Day") +
   facet_zoom(ylim = c(-0.01,0.05), zoom.size = .75) +
   theme_bw() +
@@ -44,7 +44,7 @@ plot_IE_infection_case1 <- ggplot() +
 plot_IE_death_case1 <- ggplot() +
   geom_line(data = df_IE_death_case1, aes(x = t, y= IE_death, lty = as.factor(VE_infection))) +
   labs(tag = "A(ii)",
-       y=bquote('IIE'^'Death'*'('*t*','*0*','*0.7*')'),
+       y=bquote('IIE'^'death'*'('*t*','*0*','*0.7*')'),
        x="Day",
        caption = paste0("~/Documents/GitHub/population_level_effects/1_model/case1_time_invariant_par.R","\n",
                         "~/Documents/GitHub/population_level_effects/2_simulation/simulation.R", "\n", 
@@ -87,7 +87,7 @@ df_IE_infection_case2 <- df_pY_pD_case2 %>%
 plot_IE_infection_case2 <- ggplot() +
   geom_line(data = df_IE_infection_case2, aes(x = t, y= IE_infection, lty = as.factor(VE_infection))) +
   labs(tag="B(i)",
-       y=bquote('IIE'^'Inf'*'('*t*','*0*','*0.7*')'),
+       y=bquote('IIE'^'infection'*'('*t*','*0*','*0.7*')'),
        x="Day") +
   facet_zoom(ylim = c(-0.3,0.3), zoom.size = .75) +
   theme_bw() +
@@ -103,7 +103,7 @@ plot_IE_infection_case2 <- ggplot() +
 plot_IE_death_case2 <- ggplot() +
   geom_line(data = df_IE_death_case2, aes(x = t, y= IE_death, lty = as.factor(VE_infection))) +
   labs(tag="B(ii)",
-       y=bquote('IIE'^'Death'*'('*t*','*0*','*0.7*')'),
+       y=bquote('IIE'^'death'*'('*t*','*0*','*0.7*')'),
        x="Day",
        caption = paste0("~/Documents/GitHub/population_level_effects/1_model/case2_inc_beta.R","\n",
                         "~/Documents/GitHub/population_level_effects/2_simulation/simulation.R", "\n", 
@@ -146,7 +146,7 @@ df_IE_infection_case3 <- df_pY_pD_case3 %>%
 plot_IE_infection_case3 <- ggplot() +
   geom_line(data = df_IE_infection_case3, aes(x = t, y= IE_infection, lty = as.factor(VE_infection))) +
   labs(tag="C(i)",
-       y=bquote('IIE'^'Inf'*'('*t*','*0*','*0.7*')'),
+       y=bquote('IIE'^'infection'*'('*t*','*0*','*0.7*')'),
        x="Day") +
   facet_zoom(ylim = c(-0.3,0.3), zoom.size = .75) +
   theme_bw() +
@@ -161,7 +161,7 @@ plot_IE_infection_case3 <- ggplot() +
 plot_IE_death_case3 <- ggplot() +
   geom_line(data = df_IE_death_case3, aes(x = t, y= IE_death, lty = as.factor(VE_infection))) +
   labs(tag="C(ii)",
-       y=bquote('IIE'^'Death'*'('*t*','*0*','*0.7*')'),
+       y=bquote('IIE'^'death'*'('*t*','*0*','*0.7*')'),
        x="Day",
        caption = paste0("~/Documents/GitHub/population_level_effects/1_model/case3_inc_mu.R", "\n", 
                         "~/Documents/GitHub/population_level_effects/2_simulation/simulation.R", "\n",
@@ -208,7 +208,7 @@ df_IE_infection_case4 <- df_pY_pD_case4 %>%
 plot_IE_infection_case4 <- ggplot() +
   geom_line(data = df_IE_infection_case4, aes(x = t, y= IE_infection, lty = as.factor(VE_infection_t0))) +
   labs(tag="D(i)",
-       y=bquote('IIE'^'Inf'*'('*t*','*0*','*0.7*')'),
+       y=bquote('IIE'^'infection'*'('*t*','*0*','*0.7*')'),
        x="Day") +
   scale_linetype_manual(name="VE infection, VE death", 
                         values=c("solid", "22", "42", "73"),  
@@ -223,7 +223,7 @@ plot_IE_infection_case4 <- ggplot() +
 plot_IE_death_case4 <- ggplot() +
   geom_line(data = df_IE_death_case4, aes(x = t, y= IE_death, lty = as.factor(VE_infection_t0))) +
   labs(tag="D(ii)",
-       y=bquote('IIE'^'Death'*'('*t*','*0*','*0.7*')'),
+       y=bquote('IIE'^'death'*'('*t*','*0*','*0.7*')'),
        x="Day",
        caption = paste0("~/Documents/GitHub/population_level_effects/1_model/case4_waning_VEs.R", "\n", 
                         "~/Documents/GitHub/population_level_effects/2_simulation/simulation.R", "\n",
@@ -270,7 +270,7 @@ df_IE_infection_case5 <- df_pY_pD_case5 %>%
 plot_IE_infection_case5 <- ggplot() +
   geom_line(data = df_IE_infection_case5, aes(x = t, y= IE_infection, lty = as.factor(VE_infection_t0))) +
   labs(tag="E(i)",
-       y=bquote('IIE'^'Inf'*'('*t*','*0*','*0.7*')'),
+       y=bquote('IIE'^'infection'*'('*t*','*0*','*0.7*')'),
        x="Day") +
   scale_linetype_manual(name="VE infection, VE death", 
                         values=c("solid", "22", "42", "73"),  
@@ -285,7 +285,7 @@ plot_IE_infection_case5 <- ggplot() +
 plot_IE_death_case5 <- ggplot() +
   geom_line(data = df_IE_death_case5, aes(x = t, y= IE_death, lty = as.factor(VE_infection_t0))) +
   labs(tag="E(ii)",
-       y=bquote('IIE'^'Death'*'('*t*','*0*','*0.7*')'),
+       y=bquote('IIE'^'death'*'('*t*','*0*','*0.7*')'),
        x="Day",
        caption = paste0("~/Documents/GitHub/population_level_effects/1_model/case5_inc_beta_waning_VEs.R", "\n", 
                         "~/Documents/GitHub/population_level_effects/2_simulation/simulation.R", "\n",
