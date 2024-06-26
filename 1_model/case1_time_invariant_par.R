@@ -52,5 +52,5 @@ Cum_inf_ini_s <- user(0)
 mu <- user(0.1)     # IFR
 beta <- user(0.3)   # effective contacts
 gamma <- user(0.07) # recovery rate
-theta <- user(0.9)  # 1-VE infection
-kappa <- user(0.9)  # 1-VE death | infection
+theta <- user(0.1)  # 1-VE infection
+kappa <- user(0.1)  # 1-VE death | infection

@@ -12,6 +12,7 @@ flux_beta_t[] <- user()
 flux_beta_y[] <- user()
 dim(flux_beta_t) <- user()
 dim(flux_beta_y) <- user()
+output(beta_t) <- beta 
 
 ## Tally the ever-infected
 deriv(Cum_vax) <- 0 
@@ -39,11 +40,11 @@ initial(Cum_inf_v) <- Cum_inf_ini_v
 initial(Cum_inf_s) <- Cum_inf_ini_s
 
 ## User defined parameters - default in parentheses:
-S_s_ini <- user(1000) # susceptibles
+S_s_ini <- user(1000) # susceptible
 S_v_ini <- user(1000)
 
 I_s_ini <- user(1) # infected
-I_v_ini <- user(0) # infected
+I_v_ini <- user(0)
 
 R_s_ini <- user(0)
 R_v_ini <- user(0)

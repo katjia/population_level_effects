@@ -31,8 +31,10 @@ df_all_counterfactuals_case1_time_invariant_par <-
     "alpha==0.00, VE_inf==0.9" = c(0, 0.9),
     "alpha==0.00, VE_inf==1.0" = c(0, 1.0)
   ), function(par) {
+    
     alpha <- par[1]
     theta <- 1 - par[2]
+    
     model <- case1_generator$new(
       S_s_ini = 2e4 * (1 - alpha) - 20 * (1 - alpha),
       S_v_ini = 2e4 * alpha - 20 * alpha,
@@ -58,18 +60,22 @@ df_all_counterfactuals_case1_time_invariant_par <-
     ))
   }, .id = "par")
 
-df_all_counterfactuals_case1_time_invariant_par <-
-  df_all_counterfactuals_case1_time_invariant_par %>%
-  mutate(
-    S = S_s + S_v,
-    I = I_s + I_v,
-    D = D_s + D_v,
-    R = R_s + R_v,
-    N = S + I + R,
-    N_v = S_v + I_v + R_v,
-    N_s = S_s + I_s + R_s,
-    Cum_inf = Cum_inf_s + Cum_inf_v
-  )
+# a function to collapse by vax status
+collapse_vax_status <- function(dataframe){
+    dataframe %>%
+      mutate(
+        S = S_s + S_v,
+        I = I_s + I_v,
+        D = D_s + D_v,
+        R = R_s + R_v,
+        N = S + I + R,
+        N_v = S_v + I_v + R_v,
+        N_s = S_s + I_s + R_s,
+        Cum_inf = Cum_inf_s + Cum_inf_v
+      )
+}
+
+df_all_counterfactuals_case1_time_invariant_par <- collapse_vax_status(df_all_counterfactuals_case1_time_invariant_par)
 
 # (2) Case 2: Increasing effective contacts (beta) -----------------------------
 case2_generator <- odin::odin("~/Documents/GitHub/population_level_effects/1_model/case2_inc_beta.R")
@@ -129,18 +135,7 @@ df_all_counterfactuals_case2_inc_beta <-
                       alpha = alpha))
     }, .id = "par")
 
-df_all_counterfactuals_case2_inc_beta <-
-  df_all_counterfactuals_case2_inc_beta %>%
-  mutate(
-    S = S_s + S_v,
-    I = I_s + I_v,
-    D = D_s + D_v,
-    R = R_s + R_v,
-    N = S + I + R,
-    N_v = S_v + I_v + R_v,
-    N_s = S_s + I_s + R_s,
-    Cum_inf = Cum_inf_s + Cum_inf_v
-  )
+df_all_counterfactuals_case2_inc_beta <- collapse_vax_status(df_all_counterfactuals_case2_inc_beta)
 
 # (3) Case 3: Increasing IFR (mu) ----------------------------------------------
 case3_generator <- odin::odin("~/Documents/GitHub/population_level_effects/1_model/case3_inc_mu.R")
@@ -201,18 +196,7 @@ df_all_counterfactuals_case3_inc_mu <-
     
   }, .id = "par")
 
-df_all_counterfactuals_case3_inc_mu <-
-  df_all_counterfactuals_case3_inc_mu %>%
-  mutate(
-    S = S_s + S_v,
-    I = I_s + I_v,
-    D = D_s + D_v,
-    R = R_s + R_v,
-    N = S + I + R,
-    N_v = S_v + I_v + R_v,
-    N_s = S_s + I_s + R_s,
-    Cum_inf = Cum_inf_s + Cum_inf_v
-  )
+df_all_counterfactuals_case3_inc_mu <- collapse_vax_status(df_all_counterfactuals_case3_inc_mu)
 
 # (4) Case 4: Waning VEs ------------------------------------------------------------
 case4_generator <- odin::odin("~/Documents/GitHub/population_level_effects/1_model/case4_waning_VEs.R")
@@ -261,8 +245,8 @@ df_all_counterfactuals_case4_waning <-
       D_s_ini = 0,
       D_v_ini = 0,
       Cum_vax_ini = 2e4 * alpha,
-      Cum_inf_v_ini = 20 * alpha,
-      Cum_inf_s_ini = 20 * (1 - alpha),
+      Cum_inf_ini_v = 20 * alpha,
+      Cum_inf_ini_s = 20 * (1 - alpha),
       flux_theta_waned_t = flux_theta_waned_t,
       flux_theta_waned_y = flux_theta_waned_y, 
       flux_kappa_waned_t = flux_kappa_waned_t,
@@ -272,25 +256,14 @@ df_all_counterfactuals_case4_waning <-
       mu = 0.01)
     
     as_tibble(cbind(model$run(0:(730 * 1)),
-                    VE_infection_t0 = 1-theta,
+                    VE_infection = 1-theta,
                     alpha = alpha))
     
   }, .id = "par")
 
-df_all_counterfactuals_case4_waning <-
-  df_all_counterfactuals_case4_waning %>%
-  mutate(
-    S = S_s + S_v,
-    I = I_s + I_v,
-    D = D_s + D_v,
-    R = R_s + R_v,
-    N = S + I + R,
-    N_v = S_v + I_v + R_v,
-    N_s = S_s + I_s + R_s,
-    Cum_inf = Cum_inf_s + Cum_inf_v
-  )
+df_all_counterfactuals_case4_waning <- collapse_vax_status(df_all_counterfactuals_case4_waning)
 
-# (5) Case 5: Cases 2 and 4 ---------------------------------------------------
+# (5) Case 5: Cases 2 and 4 ----------------------------------------------------
 case5_generator <- odin::odin("~/Documents/GitHub/population_level_effects/1_model/case5_inc_beta_waning_VEs.R")
 
 df_all_counterfactuals_case5_inc_beta_waning <-
@@ -341,8 +314,8 @@ df_all_counterfactuals_case5_inc_beta_waning <-
       D_s_ini = 0,
       D_v_ini = 0,
       Cum_vax_ini = 2e4 * alpha,
-      Cum_inf_v_ini = 20 * alpha,
-      Cum_inf_s_ini = 20 * (1 - alpha),
+      Cum_inf_ini_v = 20 * alpha,
+      Cum_inf_ini_s = 20 * (1 - alpha),
       flux_theta_waned_t = flux_theta_waned_t,
       flux_theta_waned_y = flux_theta_waned_y, 
       flux_kappa_waned_t = flux_kappa_waned_t,
@@ -353,20 +326,9 @@ df_all_counterfactuals_case5_inc_beta_waning <-
       mu = 0.01)
     
     as_tibble(cbind(model$run(0:(730 * 1)),
-                    VE_infection_t0 = 1-theta,
+                    VE_infection = 1-theta,
                     alpha = alpha))
     
   }, .id = "par")
 
-df_all_counterfactuals_case5_inc_beta_waning <-
-  df_all_counterfactuals_case5_inc_beta_waning %>%
-  mutate(
-    S = S_s + S_v,
-    I = I_s + I_v,
-    D = D_s + D_v,
-    R = R_s + R_v,
-    N = S + I + R,
-    N_v = S_v + I_v + R_v,
-    N_s = S_s + I_s + R_s,
-    Cum_inf = Cum_inf_s + Cum_inf_v
-  )
+df_all_counterfactuals_case5_inc_beta_waning <- collapse_vax_status(df_all_counterfactuals_case5_inc_beta_waning)

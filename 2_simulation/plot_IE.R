@@ -1,32 +1,35 @@
 library(ggforce)
-# (1) Case 1: Time-invariant parameters ---------------------------------------
-## (1.1) compute pY and pD
-df_pY_pD_case1 <- df_all_counterfactuals_case1_time_invariant_par %>%
-  filter(alpha %in% c(0, 0.7)) %>%
-  filter(VE_infection %in% c(0, 0.5, 0.9, 1)) %>%
-  select(-par, VE_infection, alpha, t, Cum_inf_s, D_s) %>%
-  mutate(
-    pInf_s = case_when(alpha == 0.7 ~ Cum_inf_s / (2e4 * 0.3),
-                       alpha == 0.0 ~ Cum_inf_s / 2e4),
-    pDeath_s = case_when(alpha == 0.7 ~ D_s / (2e4 * 0.3),
-                         alpha == 0.0 ~ D_s / 2e4)
-  )
-## (1.2) compute IE
-df_IE_death_case1 <- df_pY_pD_case1 %>%
-  select(VE_infection, alpha, t, pDeath_s) %>%
-  group_by(VE_infection, t) %>%
-  pivot_wider(names_from = alpha, values_from = pDeath_s) %>%
-  mutate(IE_death = `0` - `0.7`)
+# (1) Case 1: Time-invariant parameters ----------------------------------------
+## (1.1) get pInf_s and pDeath_s
+### create a function to get pInf_s and pDeath_s
+get_pInf_s_pDeath_s <- function(dataframe){
+  dataframe %>%
+    filter(VE_infection %in% c(0, 0.5, 0.9, 1)) %>%
+    select(-par, VE_infection, alpha, t, Cum_inf_s, D_s) %>%
+    mutate(pInf_s = case_when(alpha == 0.7 ~ Cum_inf_s / (2e4 * 0.3),
+                              alpha == 0.0 ~ Cum_inf_s / 2e4),
+           pDeath_s = case_when(alpha == 0.7 ~ D_s / (2e4 * 0.3),
+                                alpha == 0.0 ~ D_s / 2e4))
+}
 
-df_IE_infection_case1 <- df_pY_pD_case1 %>%
-  select(VE_infection, alpha, t, pInf_s) %>%
-  group_by(VE_infection, t) %>%
-  pivot_wider(names_from = alpha, values_from = pInf_s) %>%
-  mutate(IE_infection = `0` - `0.7`)
+df_pInf_s_pDeath_s_case1 <- get_pInf_s_pDeath_s(df_all_counterfactuals_case1_time_invariant_par)
+
+## (1.2) get IE
+### create a function to get IE
+get_IE <- function(dataframe){
+  dataframe %>%
+    select(VE_infection, alpha, t, pInf_s, pDeath_s) %>%
+    group_by(VE_infection, t) %>%
+    pivot_wider(names_from = alpha, values_from = c(pInf_s, pDeath_s)) %>%
+    mutate(IE_infection = `pInf_s_0` - `pInf_s_0.7`,
+           IE_death = `pDeath_s_0` - `pDeath_s_0.7`)
+}
+
+df_IE_case1 <- get_IE(df_pInf_s_pDeath_s_case1)
 
 ## (1.3) plot 
 plot_IE_infection_case1 <- ggplot() +
-  geom_line(data = df_IE_infection_case1, aes(x = t, y= IE_infection, lty = as.factor(VE_infection))) +
+  geom_line(data = df_IE_case1, aes(x = t, y= IE_infection, lty = as.factor(VE_infection))) +
   labs(tag = "A(i)",
        y=bquote('IIE'^'infection'*'('*t*','*0*','*0.7*')'),
        x="Day") +
@@ -42,7 +45,7 @@ plot_IE_infection_case1 <- ggplot() +
   theme(legend.position = "none")
 
 plot_IE_death_case1 <- ggplot() +
-  geom_line(data = df_IE_death_case1, aes(x = t, y= IE_death, lty = as.factor(VE_infection))) +
+  geom_line(data = df_IE_case1, aes(x = t, y= IE_death, lty = as.factor(VE_infection))) +
   labs(tag = "A(ii)",
        y=bquote('IIE'^'death'*'('*t*','*0*','*0.7*')'),
        x="Day",
@@ -61,31 +64,15 @@ plot_IE_death_case1 <- ggplot() +
         legend.direction = 'horizontal')
 
 # (2) Case 2: Increasing effective contacts (beta) -----------------------------
-## (2.1) compute pY and pD
-df_pY_pD_case2 <- df_all_counterfactuals_case2_inc_beta %>%
-  filter(alpha %in% c(0, 0.7)) %>%
-  filter(VE_infection %in% c(0, 0.5, 0.9, 1)) %>%
-  select(-par, VE_infection, alpha, t, Cum_inf_s, D_s) %>%
-  mutate(pInf_s = case_when(alpha == 0.7 ~ Cum_inf_s / (2e4 * 0.3),
-                          alpha == 0.0 ~ Cum_inf_s / 2e4),
-         pDeath_s = case_when(alpha == 0.7 ~ D_s / (2e4 * 0.3),
-                          alpha == 0.0 ~ D_s / 2e4))
-## (2.2) compute IE
-df_IE_death_case2 <- df_pY_pD_case2 %>%
-  select(VE_infection, alpha, t, pDeath_s) %>%
-  group_by(VE_infection, t) %>%
-  pivot_wider(names_from = alpha, values_from = pDeath_s) %>%
-  mutate(IE_death = `0` - `0.7`)
+## (2.1) get pInf_s and pDeath_s
+df_pInf_s_pDeath_s_case2 <- get_pInf_s_pDeath_s(df_all_counterfactuals_case2_inc_beta)
 
-df_IE_infection_case2 <- df_pY_pD_case2 %>%
-  select(VE_infection, alpha, t, pInf_s) %>%
-  group_by(VE_infection, t) %>%
-  pivot_wider(names_from = alpha, values_from = pInf_s) %>%
-  mutate(IE_infection = `0` - `0.7`)
+## (2.2) get IE
+df_IE_case2 <- get_IE(df_pInf_s_pDeath_s_case2)
 
 ## (2.3) plot 
 plot_IE_infection_case2 <- ggplot() +
-  geom_line(data = df_IE_infection_case2, aes(x = t, y= IE_infection, lty = as.factor(VE_infection))) +
+  geom_line(data = df_IE_case2, aes(x = t, y= IE_infection, lty = as.factor(VE_infection))) +
   labs(tag="B(i)",
        y=bquote('IIE'^'infection'*'('*t*','*0*','*0.7*')'),
        x="Day") +
@@ -101,7 +88,7 @@ plot_IE_infection_case2 <- ggplot() +
 
 
 plot_IE_death_case2 <- ggplot() +
-  geom_line(data = df_IE_death_case2, aes(x = t, y= IE_death, lty = as.factor(VE_infection))) +
+  geom_line(data = df_IE_case2, aes(x = t, y= IE_death, lty = as.factor(VE_infection))) +
   labs(tag="B(ii)",
        y=bquote('IIE'^'death'*'('*t*','*0*','*0.7*')'),
        x="Day",
@@ -120,31 +107,15 @@ plot_IE_death_case2 <- ggplot() +
         legend.direction = 'horizontal')
 
 # (3) Case 3: Increasing IFR (mu) ----------------------------------------------
-## (3.1) compute pY and pD
-df_pY_pD_case3 <- df_all_counterfactuals_case3_inc_mu %>%
-  filter(alpha %in% c(0, 0.7)) %>%
-  filter(VE_infection %in% c(0, 0.5, 0.9, 1)) %>%
-  select(-par, VE_infection, alpha, t, Cum_inf_s, D_s) %>%
-  mutate(pInf_s = case_when(alpha == 0.7 ~ Cum_inf_s / (2e4 * 0.3),
-                          alpha == 0.0 ~ Cum_inf_s / 2e4),
-         pDeath_s = case_when(alpha == 0.7 ~ D_s / (2e4 * 0.3),
-                          alpha == 0.0 ~ D_s / 2e4))
-## (3.2) compute IE
-df_IE_death_case3 <- df_pY_pD_case3 %>%
-  select(VE_infection, alpha, t, pDeath_s) %>%
-  group_by(VE_infection, t) %>%
-  pivot_wider(names_from = alpha, values_from = pDeath_s) %>%
-  mutate(IE_death = `0` - `0.7`)
+## (3.1) get pInf_s and pDeath_s
+df_pInf_s_pDeath_s_case3 <- get_pInf_s_pDeath_s(df_all_counterfactuals_case3_inc_mu)
 
-df_IE_infection_case3 <- df_pY_pD_case3 %>%
-  select(VE_infection, alpha, t, pInf_s) %>%
-  group_by(VE_infection, t) %>%
-  pivot_wider(names_from = alpha, values_from = pInf_s) %>%
-  mutate(IE_infection = `0` - `0.7`)
+## (3.2) get IE
+df_IE_case3 <- get_IE(df_pInf_s_pDeath_s_case3)
 
 ## (3.3) plot 
 plot_IE_infection_case3 <- ggplot() +
-  geom_line(data = df_IE_infection_case3, aes(x = t, y= IE_infection, lty = as.factor(VE_infection))) +
+  geom_line(data = df_IE_case3, aes(x = t, y= IE_infection, lty = as.factor(VE_infection))) +
   labs(tag="C(i)",
        y=bquote('IIE'^'infection'*'('*t*','*0*','*0.7*')'),
        x="Day") +
@@ -159,7 +130,7 @@ plot_IE_infection_case3 <- ggplot() +
   theme(legend.position = "none")
 
 plot_IE_death_case3 <- ggplot() +
-  geom_line(data = df_IE_death_case3, aes(x = t, y= IE_death, lty = as.factor(VE_infection))) +
+  geom_line(data = df_IE_case3, aes(x = t, y= IE_death, lty = as.factor(VE_infection))) +
   labs(tag="C(ii)",
        y=bquote('IIE'^'death'*'('*t*','*0*','*0.7*')'),
        x="Day",
@@ -177,36 +148,16 @@ plot_IE_death_case3 <- ggplot() +
   theme(legend.position = 'bottom',
         legend.direction = 'horizontal')
 
-plot_IE_infection_case3 + plot_IE_death_case3
-
 # (4) Case 4: Waning VEs ------------------------------------------------------
-## (4.1) compute pY and pD
-df_pY_pD_case4 <- df_all_counterfactuals_case4_waning %>%
-  filter(alpha %in% c(0, 0.7)) %>%
-  filter(VE_infection_t0 %in% c(0, 0.5, 0.9, 1)) %>%
-  select(-par, VE_infection_t0, alpha, t, Cum_inf_s, D_s) %>%
-  mutate(
-    pInf_s = case_when(alpha == 0.7 ~ Cum_inf_s / (2e4 * 0.3),
-                       alpha == 0.0 ~ Cum_inf_s / 2e4),
-    pDeath_s = case_when(alpha == 0.7 ~ D_s / (2e4 * 0.3),
-                         alpha == 0.0 ~ D_s / 2e4)
-  )
-## (4.2) compute IE
-df_IE_death_case4 <- df_pY_pD_case4 %>%
-  select(VE_infection_t0, alpha, t, pDeath_s) %>%
-  group_by(VE_infection_t0, t) %>%
-  pivot_wider(names_from = alpha, values_from = pDeath_s) %>%
-  mutate(IE_death = `0` - `0.7`)
+## (4.1) get pInf_s and pDeath_s
+df_pInf_s_pDeath_s_case4 <- get_pInf_s_pDeath_s(df_all_counterfactuals_case4_waning)
 
-df_IE_infection_case4 <- df_pY_pD_case4 %>%
-  select(VE_infection_t0, alpha, t, pInf_s) %>%
-  group_by(VE_infection_t0, t) %>%
-  pivot_wider(names_from = alpha, values_from = pInf_s) %>%
-  mutate(IE_infection = `0` - `0.7`)
+## (4.2) get IE
+df_IE_case4 <- get_IE(df_pInf_s_pDeath_s_case4)
 
 ## (4.3) plot Case 4: waning VEs 
 plot_IE_infection_case4 <- ggplot() +
-  geom_line(data = df_IE_infection_case4, aes(x = t, y= IE_infection, lty = as.factor(VE_infection_t0))) +
+  geom_line(data = df_IE_case4, aes(x = t, y= IE_infection, lty = as.factor(VE_infection))) +
   labs(tag="D(i)",
        y=bquote('IIE'^'infection'*'('*t*','*0*','*0.7*')'),
        x="Day") +
@@ -221,7 +172,7 @@ plot_IE_infection_case4 <- ggplot() +
   theme(legend.position = "none")
 
 plot_IE_death_case4 <- ggplot() +
-  geom_line(data = df_IE_death_case4, aes(x = t, y= IE_death, lty = as.factor(VE_infection_t0))) +
+  geom_line(data = df_IE_case4, aes(x = t, y= IE_death, lty = as.factor(VE_infection))) +
   labs(tag="D(ii)",
        y=bquote('IIE'^'death'*'('*t*','*0*','*0.7*')'),
        x="Day",
@@ -239,36 +190,16 @@ plot_IE_death_case4 <- ggplot() +
   theme(legend.position = 'bottom',
         legend.direction = 'horizontal')
 
-plot_IE_infection_case4 + plot_IE_death_case4
-
 # (5) Case 5: Cases 2 and 4 -----------------------------------
-## (5.1) compute pY and pD
-df_pY_pD_case5 <- df_all_counterfactuals_case5_inc_beta_waning %>%
-  filter(alpha %in% c(0, 0.7)) %>%
-  filter(VE_infection_t0 %in% c(0, 0.5, 0.9, 1)) %>%
-  select(-par, VE_infection_t0, alpha, t, Cum_inf_s, D_s) %>%
-  mutate(
-    pInf_s = case_when(alpha == 0.7 ~ Cum_inf_s / (2e4 * 0.3),
-                       alpha == 0.0 ~ Cum_inf_s / 2e4),
-    pDeath_s = case_when(alpha == 0.7 ~ D_s / (2e4 * 0.3),
-                         alpha == 0.0 ~ D_s / 2e4)
-  )
-## compute IE
-df_IE_death_case5 <- df_pY_pD_case5 %>%
-  select(VE_infection_t0, alpha, t, pDeath_s) %>%
-  group_by(VE_infection_t0, t) %>%
-  pivot_wider(names_from = alpha, values_from = pDeath_s) %>%
-  mutate(IE_death = `0` - `0.7`)
+## (5.1) get pInf_s and pDeath_s
+df_pInf_s_pDeath_s_case5 <- get_pInf_s_pDeath_s(df_all_counterfactuals_case5_inc_beta_waning)
 
-df_IE_infection_case5 <- df_pY_pD_case5 %>%
-  select(VE_infection_t0, alpha, t, pInf_s) %>%
-  group_by(VE_infection_t0, t) %>%
-  pivot_wider(names_from = alpha, values_from = pInf_s) %>%
-  mutate(IE_infection = `0` - `0.7`)
+## (5.2) get IE
+df_IE_case5 <- get_IE(df_pInf_s_pDeath_s_case5)
 
-## plot
+## (5.3) plot
 plot_IE_infection_case5 <- ggplot() +
-  geom_line(data = df_IE_infection_case5, aes(x = t, y= IE_infection, lty = as.factor(VE_infection_t0))) +
+  geom_line(data = df_IE_case5, aes(x = t, y= IE_infection, lty = as.factor(VE_infection))) +
   labs(tag="E(i)",
        y=bquote('IIE'^'infection'*'('*t*','*0*','*0.7*')'),
        x="Day") +
@@ -283,7 +214,7 @@ plot_IE_infection_case5 <- ggplot() +
   theme(legend.position = "none")
 
 plot_IE_death_case5 <- ggplot() +
-  geom_line(data = df_IE_death_case5, aes(x = t, y= IE_death, lty = as.factor(VE_infection_t0))) +
+  geom_line(data = df_IE_case5, aes(x = t, y= IE_death, lty = as.factor(VE_infection))) +
   labs(tag="E(ii)",
        y=bquote('IIE'^'death'*'('*t*','*0*','*0.7*')'),
        x="Day",
@@ -354,4 +285,4 @@ plotlist <-
 
 plot_IIE_labeled <- wrap_plots(plotlist, guides = 'collect', design = layoutplot) 
 
-ggsave("~/Documents/GitHub/population_level_effects/3_figures/Fig1_IIEs.png", plot_IIE_labeled, width = 12, height=12, dpi=300, units="in")
+ggsave("~/Documents/GitHub/population_level_effects/3_figures/Fig1_IIEs_2.png", plot_IIE_labeled, width = 12, height=12, dpi=300, units="in")
