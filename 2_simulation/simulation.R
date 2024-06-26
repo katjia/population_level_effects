@@ -290,7 +290,7 @@ df_all_counterfactuals_case4_waning <-
     Cum_inf = Cum_inf_s + Cum_inf_v
   )
 
-## (5) Case 5: Cases 2 and 4 ---------------------------------------------------
+# (5) Case 5: Cases 2 and 4 ---------------------------------------------------
 case5_generator <- odin::odin("~/Documents/GitHub/population_level_effects/1_model/case5_inc_beta_waning_VEs.R")
 
 df_all_counterfactuals_case5_inc_beta_waning <-

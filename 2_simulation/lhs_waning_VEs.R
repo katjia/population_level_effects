@@ -354,7 +354,7 @@ case4_df_IEs_for_plotting <- do.call(rbind, case4_df_IEs_for_plotting)
 case1_subsamples_IE_infection <- ggplot() +
   geom_line(data = case1_df_IEs_for_plotting, aes(x = t, y= IE_infection, group = par_id), col="gray40", alpha=0.5, linewidth=0.25) +
   labs(tag=" ",
-       y=bquote('IIE'^'Inf'*'('*t*','*0*','*alpha[1]*')'),
+       y=bquote('IIE'^'infection'*'('*t*','*0*','*alpha[1]*')'),
        x="Day") +
   facet_zoom(ylim = c(-0.01,0.05), zoom.size = .75) +
   theme_bw() +
@@ -363,7 +363,7 @@ case1_subsamples_IE_infection <- ggplot() +
 case1_subsamples_IE_death <- ggplot() +
   geom_line(data = case1_df_IEs_for_plotting, aes(x = t, y= IE_death, group = par_id), col="gray40", alpha=0.5, linewidth=0.25) +
   labs(tag=" ",
-       y=bquote('IIE'^'Death'*'('*t*','*0*','*alpha[1]*')'),
+       y=bquote('IIE'^'death'*'('*t*','*0*','*alpha[1]*')'),
        x="Day") +
   facet_zoom(ylim = c(-0.0001,0.0005), zoom.size = .75) +
   theme_bw() +
@@ -372,7 +372,7 @@ case1_subsamples_IE_death <- ggplot() +
 case4_subsamples_IE_infection <- ggplot() +
   geom_line(data = case4_df_IEs_for_plotting, aes(x = t, y= IE_infection, group = par_id), col="gray40", alpha=0.5, linewidth=0.25) +
   labs(tag=" ",
-       y=bquote('IIE'^'Inf'*'('*t*','*0*','*alpha[1]*')'),
+       y=bquote('IIE'^'infection'*'('*t*','*0*','*alpha[1]*')'),
        x="Day") +
   facet_zoom(ylim = c(-0.01,0.05), zoom.size = .75) +
   theme_bw() +
@@ -381,7 +381,7 @@ case4_subsamples_IE_infection <- ggplot() +
 case4_subsamples_IE_death <- ggplot() +
   geom_line(data = case4_df_IEs_for_plotting, aes(x = t, y= IE_death, group = par_id), col="gray40", alpha=0.5, linewidth=0.25) +
   labs(tag=" ",
-       y=bquote('IIE'^'Death'*'('*t*','*0*','*alpha[1]*')'),
+       y=bquote('IIE'^'death'*'('*t*','*0*','*alpha[1]*')'),
        x="Day") +
   facet_zoom(ylim = c(-0.0001,0.0005), zoom.size = .75) +
   theme_bw() +
@@ -397,13 +397,13 @@ col1 <- ggplot() + annotate(geom = 'text', x=0.1, y=0.1, label="Infection") + th
 col2 <- ggplot() + annotate(geom = 'text', x=0.1, y=0.1, label="Death") + theme_void() 
 
 layoutplot3 <- "
-#fffffggggg
-ahhhhhiiiii
-ahhhhhiiiii
-ahhhhhiiiii
-bjjjjjkkkkk
-bjjjjjkkkkk
-bjjjjjkkkkk
+#fffffffggggggg
+ahhhhhhhiiiiiii
+ahhhhhhhiiiiiii
+ahhhhhhhiiiiiii
+bjjjjjjjkkkkkkk
+bjjjjjjjkkkkkkk
+bjjjjjjjkkkkkkk
 "
 
 plotlist3 <-
@@ -419,4 +419,4 @@ plotlist3 <-
 
 plot_subsamples_IE_labeled <- wrap_plots(plotlist3, guides = 'collect', design = layoutplot3) 
 
-ggsave("~/Documents/GitHub/population_level_effects/3_figures/eFig2.png", case1_subsamples_IE_death, width = 10, height=5, dpi=300, units="in")
+ggsave("~/Documents/GitHub/population_level_effects/3_figures/eFig2.png", plot_subsamples_IE_labeled, width = 11, height=5, dpi=300, units="in")
