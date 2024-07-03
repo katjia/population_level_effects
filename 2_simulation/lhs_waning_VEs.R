@@ -277,36 +277,44 @@ subsamples_IE_infection_case1 <- ggplot() +
   labs(tag=" ",
        y=bquote('IIE'^'infection'*'('*t*','*0*','*alpha[1]*')'),
        x="Day") +
-  facet_zoom(ylim = c(-0.01,0.05), zoom.size = .75) +
+  facet_zoom(zoom.size = 1, ylim = c(-0.01,0.05)) +
   theme_bw() +
-  theme(legend.position = "none")
+  theme(legend.position = "none",
+        zoom.x = element_rect(fill = "white", color = "black", linewidth = 0.25), 
+        zoom.y = element_rect(fill = "white", color = "black", linewidth = 0.25)) 
 
 subsamples_IE_death_case1 <- ggplot() +
   geom_line(data = df_IEs_for_plotting_case1, aes(x = t, y= IE_death, group = par_id), col="gray40", alpha=0.5, linewidth=0.25) +
   labs(tag=" ",
        y=bquote('IIE'^'death'*'('*t*','*0*','*alpha[1]*')'),
        x="Day") +
-  facet_zoom(ylim = c(-0.0001,0.0005), zoom.size = .75) +
+  facet_zoom(zoom.size = 1, ylim = c(-0.0001,0.0005)) +
   theme_bw() +
-  theme(legend.position = "none")
+  theme(legend.position = "none",
+        zoom.x = element_rect(fill = "white", color = "black", linewidth = 0.25), 
+        zoom.y = element_rect(fill = "white", color = "black", linewidth = 0.25)) 
 
 subsamples_IE_infection_case4 <- ggplot() +
   geom_line(data = df_IEs_for_plotting_case4, aes(x = t, y= IE_infection, group = par_id), col="gray40", alpha=0.5, linewidth=0.25) +
   labs(tag=" ",
        y=bquote('IIE'^'infection'*'('*t*','*0*','*alpha[1]*')'),
        x="Day") +
-  facet_zoom(ylim = c(-0.01,0.05), zoom.size = .75) +
+  facet_zoom(zoom.size = 1, ylim = c(-0.01,0.05)) +
   theme_bw() +
-  theme(legend.position = "none")
+  theme(legend.position = "none",
+        zoom.x = element_rect(fill = "white", color = "black", linewidth = 0.25), 
+        zoom.y = element_rect(fill = "white", color = "black", linewidth = 0.25)) 
 
 subsamples_IE_death_case4 <- ggplot() +
   geom_line(data = df_IEs_for_plotting_case4, aes(x = t, y= IE_death, group = par_id), col="gray40", alpha=0.5, linewidth=0.25) +
   labs(tag=" ",
        y=bquote('IIE'^'death'*'('*t*','*0*','*alpha[1]*')'),
        x="Day") +
-  facet_zoom(ylim = c(-0.0001,0.0005), zoom.size = .75) +
+  facet_zoom(zoom.size = 1, ylim = c(-0.0001,0.0005)) +
   theme_bw() +
-  theme(legend.position = "none")
+  theme(legend.position = "none",
+        zoom.x = element_rect(fill = "white", color = "black", linewidth = 0.25), 
+        zoom.y = element_rect(fill = "white", color = "black", linewidth = 0.25)) 
 
 # collate the plots
 row1 <- ggplot() + annotate(geom = 'text', x=0.1, y=0.1, label="Case 1", angle = 90) + theme_void() 
@@ -340,4 +348,4 @@ plotlist3 <-
 
 plot_subsamples_IE_labeled <- wrap_plots(plotlist3, guides = 'collect', design = layoutplot3) 
 
-ggsave("~/Documents/GitHub/population_level_effects/3_figures/eFig2.png", plot_subsamples_IE_labeled, width = 11, height=5, dpi=300, units="in")
+ggsave("~/Documents/GitHub/population_level_effects/3_figures/eFig2_2.png", plot_subsamples_IE_labeled, width = 11, height=5, dpi=300, units="in")

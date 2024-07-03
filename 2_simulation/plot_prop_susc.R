@@ -20,8 +20,7 @@ plot_instant_pS_case1 <- ggplot() +
   geom_line(data = df_instant_pS_case1, aes(x = t, y= pS_s, col="Unvaccinated", lty = as.factor(VE_infection))) +
   geom_line(data = df_instant_pS_case1, aes(x = t, y= pS_v, col="Vaccinated", lty = as.factor(VE_infection))) +
   facet_grid(.~label)+
-  labs(tag="A",
-       col="Vaccination status",
+  labs(col="Vaccination status",
        y="Proportion susceptible",
        x="Day") +
   scale_linetype_manual(name="VE infection, VE death", 
@@ -41,8 +40,7 @@ plot_instant_pS_case2 <- ggplot() +
   geom_line(data = df_instant_pS_case2, aes(x = t, y= pS_s, col="Unvaccinated", lty = as.factor(VE_infection))) +
   geom_line(data = df_instant_pS_case2, aes(x = t, y= pS_v, col="Vaccinated", lty = as.factor(VE_infection))) +
   facet_grid(.~label)+
-  labs(tag="B",
-       col="Vaccination status",
+  labs(col="Vaccination status",
        y="Proportion susceptible",
        x="Day") +
   scale_linetype_manual(name="VE infection, VE death", 
@@ -62,8 +60,7 @@ plot_instant_pS_case3 <- ggplot() +
   geom_line(data = df_instant_pS_case3, aes(x = t, y= pS_s, col="Unvaccinated", lty = as.factor(VE_infection))) +
   geom_line(data = df_instant_pS_case3, aes(x = t, y= pS_v, col="Vaccinated", lty = as.factor(VE_infection))) +
   facet_grid(.~label)+
-  labs(tag="C",
-       col="Vaccination status",
+  labs(col="Vaccination status",
        y="Proportion susceptible",
        x="Day") +
   scale_linetype_manual(name="VE infection, VE death", 
@@ -83,8 +80,7 @@ plot_instant_pS_case4 <- ggplot() +
   geom_line(data = df_instant_pS_case4, aes(x = t, y= pS_s, col="Unvaccinated", lty = as.factor(VE_infection))) +
   geom_line(data = df_instant_pS_case4, aes(x = t, y= pS_v, col="Vaccinated", lty = as.factor(VE_infection))) +
   facet_grid(.~label)+
-  labs(tag="D",
-       col="Vaccination status",
+  labs(col="Vaccination status",
        y="Proportion susceptible",
        x="Day") +
   scale_linetype_manual(name="VE infection, VE death", 
@@ -104,8 +100,7 @@ plot_instant_pS_case5 <- ggplot() +
   geom_line(data = df_instant_pS_case5, aes(x = t, y= pS_s, col="Unvaccinated", lty = as.factor(VE_infection))) +
   geom_line(data = df_instant_pS_case5, aes(x = t, y= pS_v, col="Vaccinated", lty = as.factor(VE_infection))) +
   facet_grid(.~label)+
-  labs(tag="E",
-       col="Vaccination status",
+  labs(col="Vaccination status",
        y="Proportion susceptible",
        x="Day") +
   scale_linetype_manual(name="VE infection, VE death", 
@@ -152,5 +147,5 @@ plotlist3 <-
 
 plot_instant_pS_labeled <- wrap_plots(plotlist3, guides = 'collect', design = layoutplot3) 
 
-ggsave("~/Documents/GitHub/population_level_effects/3_figures/eFig3_traj_pS_2.png", plot_instant_pS_labeled, width = 10, height=9, dpi=300, units="in")
+ggsave("~/Documents/GitHub/population_level_effects/3_figures/eFig3_traj_pS.png", plot_instant_pS_labeled, width = 10, height=9, dpi=300, units="in")
 
