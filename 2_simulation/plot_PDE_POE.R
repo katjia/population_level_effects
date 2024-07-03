@@ -41,9 +41,8 @@ df_POE_case1 <- get_POE(df_all_counterfactuals_case1_time_invariant_par)
 plot_PDE_POE_infection_case1 <- ggplot() +
   geom_line(data = df_POE_case1, aes(x = t, y= POE_infection, lty = "Overall")) +
   geom_line(data = df_PDE_case1, aes(x = t, y= PDE_infection, lty = "Direct")) +
-  labs(tag="A(i)",
-       y=bquote(atop('POE'^'infection'*'('*t*','*0*','*0.7*')'~or,
-                     ~'PDE'^'infection'*'('*t*','*0.7*')')),
+  labs(y=bquote(atop('POE'^'infection'*'('*t*','*0*','*0.7*')'~or,
+                     ~'PDE'^'infection'*'('*t*','*0*','*0.7*')')),
        x="Day",
        lty=" ") +
   theme_bw() +
@@ -52,9 +51,8 @@ plot_PDE_POE_infection_case1 <- ggplot() +
 plot_PDE_POE_death_case1 <- ggplot() +
   geom_line(data = df_POE_case1, aes(x = t, y= POE_death, lty = "Overall")) +
   geom_line(data = df_PDE_case1, aes(x = t, y= PDE_death, lty = "Direct")) +
-  labs(tag="A(ii)",
-       y=bquote(atop('POE'^'death'*'('*t*','*0*','*0.7*')'~or,
-                     ~'PDE'^'death'*'('*t*','*0.7*')')),
+  labs(y=bquote(atop('POE'^'death'*'('*t*','*0*','*0.7*')'~or,
+                     ~'PDE'^'death'*'('*t*','*0*','*0.7*')')),
        x="Day",
        lty=" ",
        caption = paste0("~/Documents/GitHub/population_level_effects/1_model/case1_time_invariant_par.R", "\n", 
@@ -74,9 +72,8 @@ df_POE_case2 <- get_POE(df_all_counterfactuals_case2_inc_beta)
 plot_PDE_POE_infection_case2 <- ggplot() +
   geom_line(data = df_POE_case2, aes(x = t, y= POE_infection, lty = "Overall")) +
   geom_line(data = df_PDE_case2, aes(x = t, y= PDE_infection, lty = "Direct")) +
-  labs(tag="B(i)",
-       y=bquote(atop('POE'^'infection'*'('*t*','*0*','*0.7*')'~or,
-                     ~'PDE'^'infection'*'('*t*','*0.7*')')),
+  labs(y=bquote(atop('POE'^'infection'*'('*t*','*0*','*0.7*')'~or,
+                     ~'PDE'^'infection'*'('*t*','*0*','*0.7*')')),
        x="Day",
        lty=" ") +
   theme_bw() +
@@ -85,9 +82,8 @@ plot_PDE_POE_infection_case2 <- ggplot() +
 plot_PDE_POE_death_case2 <- ggplot() +
   geom_line(data = df_POE_case2, aes(x = t, y= POE_death, lty = "Overall")) +
   geom_line(data = df_PDE_case2, aes(x = t, y= PDE_death, lty = "Direct")) +
-  labs(tag="B(ii)",
-       y=bquote(atop('POE'^'death'*'('*t*','*0*','*0.7*')'~or,
-                     ~'PDE'^'death'*'('*t*','*0.7*')')),
+  labs(y=bquote(atop('POE'^'death'*'('*t*','*0*','*0.7*')'~or,
+                     ~'PDE'^'death'*'('*t*','*0*','*0.7*')')),
        x="Day",
        lty=" ",
        caption = paste0("~/Documents/GitHub/population_level_effects/2_simulation/simulation.R", "\n", 
@@ -108,9 +104,8 @@ df_POE_case3 <- get_POE(df_all_counterfactuals_case3_inc_mu)
 plot_PDE_POE_infection_case3 <- ggplot() +
   geom_line(data = df_POE_case3, aes(x = t, y= POE_infection, lty = "Overall")) +
   geom_line(data = df_PDE_case3, aes(x = t, y= PDE_infection, lty = "Direct")) +
-  labs(tag="C(i)",
-       y=bquote(atop('POE'^'infection'*'('*t*','*0*','*0.7*')'~or,
-                     ~'PDE'^'infection'*'('*t*','*0.7*')')),
+  labs(y=bquote(atop('POE'^'infection'*'('*t*','*0*','*0.7*')'~or,
+                     ~'PDE'^'infection'*'('*t*','*0*','*0.7*')')),
        x="Day",
        lty=" ") +
   theme_bw() +
@@ -119,9 +114,8 @@ plot_PDE_POE_infection_case3 <- ggplot() +
 plot_PDE_POE_death_case3 <- ggplot() +
   geom_line(data = df_POE_case3, aes(x = t, y= POE_death, lty = "Overall")) +
   geom_line(data = df_PDE_case3, aes(x = t, y= PDE_death, lty = "Direct")) +
-  labs(tag="C(ii)",
-       y=bquote(atop('POE'^'death'*'('*t*','*0*','*0.7*')'~or,
-                     ~'PDE'^'death'*'('*t*','*0.7*')')),
+  labs(y=bquote(atop('POE'^'death'*'('*t*','*0*','*0.7*')'~or,
+                     ~'PDE'^'death'*'('*t*','*0*','*0.7*')')),
        x="Day",
        lty=" ",
        caption = paste0("~/Documents/GitHub/population_level_effects/1_model/case3_inc_mu.R", "\n", 
@@ -141,9 +135,8 @@ df_POE_case4 <- get_POE(df_all_counterfactuals_case4_waning)
 plot_PDE_POE_infection_case4 <- ggplot() +
   geom_line(data = df_POE_case4, aes(x = t, y= POE_infection, lty = "Overall")) +
   geom_line(data = df_PDE_case4, aes(x = t, y= PDE_infection, lty = "Direct")) +
-  labs(tag="D(i)",
-       y=bquote(atop('POE'^'infection'*'('*t*','*0*','*0.7*')'~or,
-                     ~'PDE'^'infection'*'('*t*','*0.7*')')),
+  labs(y=bquote(atop('POE'^'infection'*'('*t*','*0*','*0.7*')'~or,
+                     ~'PDE'^'infection'*'('*t*','*0*','*0.7*')')),
        x="Day",
        lty=" ") +
   theme_bw() +
@@ -152,9 +145,8 @@ plot_PDE_POE_infection_case4 <- ggplot() +
 plot_PDE_POE_death_case4 <- ggplot() +
   geom_line(data = df_POE_case4, aes(x = t, y= POE_death, lty = "Overall")) +
   geom_line(data = df_PDE_case4, aes(x = t, y= PDE_death, lty = "Direct")) +
-  labs(tag="D(ii)", 
-       y=bquote(atop('POE'^'death'*'('*t*','*0*','*0.7*')'~or,
-                     ~'PDE'^'death'*'('*t*','*0.7*')')),
+  labs(y=bquote(atop('POE'^'death'*'('*t*','*0*','*0.7*')'~or,
+                     ~'PDE'^'death'*'('*t*','*0*','*0.7*')')),
        x="Day",
        lty=" ",
        caption = paste0("~/Documents/GitHub/population_level_effects/1_model/case4_waning_VEs.R", "\n", 
@@ -174,9 +166,8 @@ df_POE_case5 <- get_POE(df_all_counterfactuals_case5_inc_beta_waning)
 plot_PDE_POE_infection_case5 <- ggplot() +
   geom_line(data = df_POE_case5, aes(x = t, y= POE_infection, lty = "Overall")) +
   geom_line(data = df_PDE_case5, aes(x = t, y= PDE_infection, lty = "Direct")) +
-  labs(tag="E(i)",
-       y=bquote(atop('POE'^'infection'*'('*t*','*0*','*0.7*')'~or,~
-                     'PDE'^'infection'*'('*t*','*0.7*')')),
+  labs(y=bquote(atop('POE'^'infection'*'('*t*','*0*','*0.7*')'~or,~
+                     'PDE'^'infection'*'('*t*','*0*','*0.7*')')),
        x="Day",
        lty=" ") +
   theme_bw() +
@@ -185,9 +176,8 @@ plot_PDE_POE_infection_case5 <- ggplot() +
 plot_PDE_POE_death_case5 <- ggplot() +
   geom_line(data = df_POE_case5, aes(x = t, y= POE_death, lty = "Overall")) +
   geom_line(data = df_PDE_case5, aes(x = t, y= PDE_death, lty = "Direct")) +
-  labs(tag="E(ii)",
-       y=bquote(atop('POE'^'death'*'('*t*','*0*','*0.7*')'~or,
-                     ~'PDE'^'death'*'('*t*','*0.7*')')),
+  labs(y=bquote(atop('POE'^'death'*'('*t*','*0*','*0.7*')'~or,
+                     ~'PDE'^'death'*'('*t*','*0*','*0.7*')')),
        x="Day",
        lty=" ",
        caption = paste0("~/Documents/GitHub/population_level_effects/1_model/case5_inc_beta_waning_VEs.R", "\n", 
@@ -240,4 +230,4 @@ plotlist2 <-
 
 plot_PDE_POE_labeled <- wrap_plots(plotlist2, guides = 'collect', design = layoutplot2) 
 
-ggsave("~/Documents/GitHub/population_level_effects/3_figures/Fig2_PDE_POE_2.png", plot_PDE_POE_labeled, width = 9, height=10, dpi=300, units="in")
+ggsave("~/Documents/GitHub/population_level_effects/3_figures/Fig2_PDE_POE.png", plot_PDE_POE_labeled, width = 9, height=10, dpi=300, units="in")
