@@ -217,8 +217,8 @@ colnames(total_days_claim1a_is_false_case4) <- 1:ndraws
 (no_integral_par_case4 <- which(total_days_claim1a_is_false_case4[3,]!=0, TRUE))
 
 ## (2.3) Check none of the LHS samples gives POE < PDE
-(claim1a_is_false_case4_infection <- which(total_days_claim1a_is_false_case4_non_flagged[1,-no_integral_par_case1] > 0, TRUE))
-(claim1a_is_false_case4_death <- which(total_days_claim1a_is_false_case4_non_flagged[2,-no_integral_par_case1] > 0, TRUE))
+(claim1a_is_false_case4_infection <- which(total_days_claim1a_is_false_case4[1,-no_integral_par_case4] > 0, TRUE))
+(claim1a_is_false_case4_death <- which(total_days_claim1a_is_false_case4[2,-no_integral_par_case4] > 0, TRUE))
 
 ## <III> Randomly draw 50 samples from LHS and plot PDEs and POEs ------------------
 ### (3.1) randomly draw samples
@@ -333,4 +333,4 @@ plotlist_eFig3 <-
 
 plot_subsamples_POE_PDE_labeled <- wrap_plots(plotlist_eFig3, guides = 'collect', design = layoutplot_eFig3) 
 
-ggsave("~/Documents/GitHub/population_level_effects/3_figures/eFig3_2.png", plot_subsamples_POE_PDE_labeled, width = 11, height=6, dpi=300, units="in")
+ggsave("~/Documents/GitHub/population_level_effects/3_figures/eFig3.png", plot_subsamples_POE_PDE_labeled, width = 11, height=6, dpi=300, units="in")
