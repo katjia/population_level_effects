@@ -60,7 +60,7 @@ simulate_case1 <- function(par, alpha_hypothetical, alpha_observed){
                                 mu = as.numeric(par["mu"])
                               )
                               as_tibble(cbind(
-                                model$run(0:(730 * 1)),
+                                model$run(0:(730 * 1), method = "ode45"),
                                 VE_infection = 1 - as.numeric(par["theta"]),
                                 alpha = alpha,
                                 alpha_observed = as.numeric(par["alpha_observed"]),
@@ -108,12 +108,12 @@ test_claim1_case1 <- function(par){
 total_days_claim1_is_false_case1 <- apply(parms_values, 1, test_claim1_case1)
 colnames(total_days_claim1_is_false_case1) <- 1:ndraws
 
-## (2.2) Identify par with unsuccessful numerical integration
+## (2.2) Check no par gives unsuccessful numerical integration
 (no_integral_par_case1 <- which(total_days_claim1_is_false_case1[3,]!=0, TRUE))
 
 ## (2.3) Check none of the LHS samples gives POE < PDE
-(claim1a_is_false_case1_infection <- which(total_days_claim1_is_false_case1[1,-no_integral_par_case1] > 0, TRUE))
-(claim1a_is_false_case1_death <- which(total_days_claim1_is_false_case1[2,-no_integral_par_case1] > 0, TRUE))
+(claim1a_is_false_case1_infection <- which(total_days_claim1_is_false_case1[1,] > 0, TRUE))
+(claim1a_is_false_case1_death <- which(total_days_claim1_is_false_case1[2,] > 0, TRUE))
 
 # <II> Test whether Claim 1a holds under Scenario 4 ----------------------------
 ## (1) Test Claim 1a under Scenario 4 --------------------------------------------
@@ -164,7 +164,7 @@ simulate_case4 <- function(par, alpha_hypothetical=0, alpha_observed){
                               )
                               
                               # Run model
-                              as_tibble(cbind(model$run(0:(730 * 1)),
+                              as_tibble(cbind(model$run(0:(730 * 1), method = "ode45"),
                                               VE_infection = 1 - as.numeric(par["theta"]),
                                               alpha = alpha,
                                               alpha_observed = as.numeric(par["alpha_observed"]),
@@ -213,18 +213,17 @@ test_claim1a_case4 <- function(par){
 total_days_claim1a_is_false_case4 <- apply(parms_values, 1, test_claim1a_case4)
 colnames(total_days_claim1a_is_false_case4) <- 1:ndraws
 
-## (2.2) Identify par with unsuccessful numerical integration
+## (2.2) Check no par gives unsuccessful numerical integration
 (no_integral_par_case4 <- which(total_days_claim1a_is_false_case4[3,]!=0, TRUE))
 
 ## (2.3) Check none of the LHS samples gives POE < PDE
-(claim1a_is_false_case4_infection <- which(total_days_claim1a_is_false_case4[1,-no_integral_par_case4] > 0, TRUE))
-(claim1a_is_false_case4_death <- which(total_days_claim1a_is_false_case4[2,-no_integral_par_case4] > 0, TRUE))
+(claim1a_is_false_case4_infection <- which(total_days_claim1a_is_false_case4[1,] > 0, TRUE))
+(claim1a_is_false_case4_death <- which(total_days_claim1a_is_false_case4[2,] > 0, TRUE))
 
 ## <III> Randomly draw 50 samples from LHS and plot PDEs and POEs ------------------
 ### (3.1) randomly draw samples
 set.seed(123)
 par_id <- 1:ndraws 
-par_id <- par_id[-c(no_integral_par_case1, no_integral_par_case4)] # exclude par that has no integrals
 subsamples_id <- sample(par_id, size=50, replace = FALSE)
 subsamples <- parms_values[subsamples_id, ]
 subsamples <- cbind(subsamples, par_id=subsamples_id)
