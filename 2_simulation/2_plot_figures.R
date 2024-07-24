@@ -76,7 +76,8 @@ plot_claim1a_PDE_POE_death <- lapply(PDE_POE_alpha0_0_alpha1_07, function(df) {
          x="Day",
          lty=" ") +
     theme_bw() +
-    theme(legend.direction = "horizontal")
+    theme(legend.direction = "horizontal",
+          legend.text=element_text(size=12))
 })
 
 ## (3) collate plots -----------------------------------------------------------
@@ -170,7 +171,8 @@ plot_claim1b_PDE_POE_death <- lapply(PDE_POE_alpha1_07_alpha2_09, function(df) {
          x="Day",
          lty=" ") +
     theme_bw() +
-    theme(legend.direction = "horizontal")
+    theme(legend.direction = "horizontal",
+          legend.text=element_text(size=12))
 })
 
 ## (3) collate plots  -----------------------------------------------------------
