@@ -2,7 +2,7 @@ library(RColorBrewer)
 # <I> function -----------------------------------------------------------------
 get_instant_pS <- function(df_all_counterfactuals){
   df_out <- df_all_counterfactuals %>%
-    select(alpha, t, S_s, S_v, N_s, N_v, N) %>%
+    select(alpha, t, S_s, S_v, N_s, N_v) %>%
     mutate(pS_s = S_s / N_s,
            pS_v = S_v / N_v,
            label = case_when(alpha == 0.9 ~ "90% vaccinated",

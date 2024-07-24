@@ -97,10 +97,10 @@ test_claim1_scenario_1 <- function(par){
   flag_unsuccessful_numerical_integration <- ifelse(is(tt,"warning"), "integration unsuccessful", 0)
   
   # Evaluate
-  POE_PDE <- get_PDE_POE(out_scenario_1, alpha_hypothetical = par["alpha_hypothetical"], alpha_observed = par["alpha_observed"])
+  PDE_POE <- get_PDE_POE(out_scenario_1, alpha_hypothetical = par["alpha_hypothetical"], alpha_observed = par["alpha_observed"])
   
-  days_POE_less_PDE_infection <- sum(POE_PDE$POE_infection - POE_PDE$PDE_infection < -10e-7)
-  days_POE_less_PDE_death <- sum(POE_PDE$POE_death - POE_PDE$PDE_death < -10e-7)
+  days_POE_less_PDE_infection <- sum(PDE_POE$POE_infection - PDE_POE$PDE_infection < -10e-7)
+  days_POE_less_PDE_death <- sum(PDE_POE$POE_death - PDE_POE$PDE_death < -10e-7)
   
   return(c(days_POE_less_PDE_infection=days_POE_less_PDE_infection,
            days_POE_less_PDE_death=days_POE_less_PDE_death,
@@ -189,10 +189,10 @@ test_claim1a_scenario_4 <- function(par){
   flag_unsuccessful_numerical_integration <- ifelse(is(tt,"warning"), "integration unsuccessful", 0)
   
   # Evaluate
-  POE_PDE <- get_PDE_POE(out_scenario_4, alpha_hypothetical = 0, alpha_observed = par["alpha_observed"])
+  PDE_POE <- get_PDE_POE(out_scenario_4, alpha_hypothetical = 0, alpha_observed = par["alpha_observed"])
   
-  days_POE_less_PDE_infection <- sum(POE_PDE$POE_infection - POE_PDE$PDE_infection < -10e-7)
-  days_POE_less_PDE_death <- sum(POE_PDE$POE_death - POE_PDE$PDE_death < -10e-7)
+  days_POE_less_PDE_infection <- sum(PDE_POE$POE_infection - PDE_POE$PDE_infection < -10e-7)
+  days_POE_less_PDE_death <- sum(PDE_POE$POE_death - PDE_POE$PDE_death < -10e-7)
   
   return(c(days_POE_less_PDE_infection = days_POE_less_PDE_infection,
            days_POE_less_PDE_death = days_POE_less_PDE_death,
@@ -221,7 +221,7 @@ subsamples <- cbind(subsamples, par_id=subsamples_id)
 
 ## (3.2) get PDEs and POEs for plotting ----------------------------------------
 # a function to get PDE and POE for plotting 
-get_POE_PDE_for_plotting <- function(subpar){
+get_PDE_POE_for_plotting <- function(subpar){
   
   # simulate Scenario 1 under claim 1
   out_scenario_1 <- simulate_claim1_scenario_1(subpar)
@@ -239,16 +239,16 @@ get_POE_PDE_for_plotting <- function(subpar){
     mutate(scenario = "Scenario 4",
            subpar_id = subpar["par_id"]) 
   
-  POE_PDE <- rbind(PDE_POE_scenario_1, PDE_POE_scenario_4)
-  return(POE_PDE)
+  PDE_POE <- rbind(PDE_POE_scenario_1, PDE_POE_scenario_4)
+  return(PDE_POE)
 }
 
 ### (3.3) plot
-df_POE_PDE_for_plotting <- apply(subsamples, 1, get_POE_PDE_for_plotting) 
+df_PDE_POE_for_plotting <- apply(subsamples, 1, get_PDE_POE_for_plotting) 
 
-df_POE_PDE_for_plotting <- do.call(rbind, df_POE_PDE_for_plotting)  
+df_PDE_POE_for_plotting <- do.call(rbind, df_PDE_POE_for_plotting)  
 
-df_POE_PDE_for_plotting_long <- df_POE_PDE_for_plotting %>% 
+df_PDE_POE_for_plotting_long <- df_PDE_POE_for_plotting %>% 
   select(scenario, subpar_id, t, PDE_infection, PDE_death, POE_infection, POE_death) %>% 
   pivot_longer(
     cols = -c("scenario","subpar_id", "t"),
@@ -257,8 +257,8 @@ df_POE_PDE_for_plotting_long <- df_POE_PDE_for_plotting %>%
     values_to = "count"
   )
 
-subsamples_POE_PDE_death <- ggplot() +
-  geom_line(data = df_POE_PDE_for_plotting_long %>% filter(outcome=="death"), aes(x = t, y= count, group = subpar_id), col="gray40", alpha=0.5, linewidth=0.25) +
+subsamples_PDE_POE_death <- ggplot() +
+  geom_line(data = df_PDE_POE_for_plotting_long %>% filter(outcome=="death"), aes(x = t, y= count, group = subpar_id), col="gray40", alpha=0.5, linewidth=0.25) +
   labs(tag=" ",
        y= bquote(atop('POE'^'death'*~or
                       ~'PDE'^'death')),
@@ -269,8 +269,8 @@ subsamples_POE_PDE_death <- ggplot() +
         zoom.x = element_rect(fill = "white", color = "black", linewidth = 0.25), 
         zoom.y = element_rect(fill = "white", color = "black", linewidth = 0.25)) 
 
-subsamples_POE_PDE_infection <- ggplot() +
-  geom_line(data = df_POE_PDE_for_plotting_long %>% filter(outcome=="infection"), aes(x = t, y= count, group = subpar_id), col="gray40", alpha=0.5, linewidth=0.25) +
+subsamples_PDE_POE_infection <- ggplot() +
+  geom_line(data = df_PDE_POE_for_plotting_long %>% filter(outcome=="infection"), aes(x = t, y= count, group = subpar_id), col="gray40", alpha=0.5, linewidth=0.25) +
   labs(tag=" ",
        y= bquote(atop('POE'^'infection'*~or
                       ~'PDE'^'infection')),
@@ -302,9 +302,9 @@ plotlist_eFig2 <-
   list(
     f = col1,
     g = col2,
-    h = subsamples_POE_PDE_infection,
-    i = subsamples_POE_PDE_death)
+    h = subsamples_PDE_POE_infection,
+    i = subsamples_PDE_POE_death)
 
-plot_subsamples_POE_PDE_labeled <- wrap_plots(plotlist_eFig2, guides = 'collect', design = layoutplot_eFig2) 
+plot_subsamples_PDE_POE_labeled <- wrap_plots(plotlist_eFig2, guides = 'collect', design = layoutplot_eFig2) 
 
-ggsave("3_figures/eFig2.png", plot_subsamples_POE_PDE_labeled, width = 11, height=6, dpi=300, units="in")
+ggsave("3_figures/eFig2.png", plot_subsamples_PDE_POE_labeled, width = 11, height=6, dpi=300, units="in")
