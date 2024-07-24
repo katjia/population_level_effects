@@ -30,7 +30,7 @@ plot_instant_pS <- lapply(df_instant_pS, function(df) {
     theme_bw() +
     scale_color_manual(values = c("#E78AC3","#66C2A5")) +
     lims(y=c(0,1))
-  })
+  }) # Expected warning: 731 rows containing missing values due to zeros vaccinated under alpha=0
 
 # collate the plots
 layoutplot_eFig6 <- "
