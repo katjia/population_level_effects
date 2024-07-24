@@ -1,0 +1,6 @@
+source("2_simulation/1_simulation.R")
+source("2_simulation/2_plot_figures.R")
+source("2_simulation/3_lhs.R")
+source("2_simulation/4_plot_IIE.R")
+source("2_simulation/5_plot_pS.R")
+source("2_simulation/6_plot_epi_curve_scenario4.R")
