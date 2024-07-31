@@ -136,8 +136,8 @@ test_claims <- function(par, claim_scenario){
   # evaluate
   PDE_POE <- get_PDE_POE(out_scenario, alpha_hypothetical = ALPHA_HYPOTHETICAL, alpha_observed = ALPHA_OBSERVED)
   
-  days_POE_less_PDE_infection <- sum(PDE_POE$POE_infection - PDE_POE$PDE_infection < -10e-7)
-  days_POE_less_PDE_death <- sum(PDE_POE$POE_death - PDE_POE$PDE_death < -10e-7)
+  days_POE_less_PDE_infection <- sum(PDE_POE$POE_infection - PDE_POE$PDE_infection < -1e-7)
+  days_POE_less_PDE_death <- sum(PDE_POE$POE_death - PDE_POE$PDE_death < -1e-7)
   
   return(c(days_POE_less_PDE_infection=days_POE_less_PDE_infection,
            days_POE_less_PDE_death=days_POE_less_PDE_death,
