@@ -134,13 +134,13 @@ test_claims <- function(par, claim_scenario){
   flag_unsuccessful_numerical_integration <- ifelse(is(tt,"warning"), "integration unsuccessful", 0)
   
   # evaluate
-  PDE_POE <- get_PDE_POE(out_scenario, alpha_hypothetical = ALPHA_HYPOTHETICAL, alpha_observed = ALPHA_OBSERVED)
+  DI_OI <- get_DI_OI(out_scenario, alpha_hypothetical = ALPHA_HYPOTHETICAL, alpha_observed = ALPHA_OBSERVED)
   
-  days_POE_less_PDE_infection <- sum(PDE_POE$POE_infection - PDE_POE$PDE_infection < -1e-7)
-  days_POE_less_PDE_death <- sum(PDE_POE$POE_death - PDE_POE$PDE_death < -1e-7)
+  days_OI_less_DI_infection <- sum(DI_OI$OI_infection - DI_OI$DI_infection < -1e-7)
+  days_OI_less_DI_death <- sum(DI_OI$OI_death - DI_OI$DI_death < -1e-7)
   
-  return(c(days_POE_less_PDE_infection=days_POE_less_PDE_infection,
-           days_POE_less_PDE_death=days_POE_less_PDE_death,
+  return(c(days_OI_less_DI_infection=days_OI_less_DI_infection,
+           days_OI_less_DI_death=days_OI_less_DI_death,
            flag=flag_unsuccessful_numerical_integration))
 }
 
@@ -152,9 +152,9 @@ colnames(total_days_claim1_is_false_scenario_1) <- 1:ndraws
 ## (2) check no par gives unsuccessful numerical integration
 (no_integral_par_scenario_1 <- which(total_days_claim1_is_false_scenario_1["flag",]!=0, TRUE))
 
-## (3) check none of the LHS samples gives POE < PDE
-(claim1a_is_false_scenario_1_infection <- which(total_days_claim1_is_false_scenario_1["days_POE_less_PDE_infection",] > 0, TRUE))
-(claim1a_is_false_scenario_1_death <- which(total_days_claim1_is_false_scenario_1["days_POE_less_PDE_death",] > 0, TRUE))
+## (3) check none of the LHS samples gives OI < DI
+(claim1a_is_false_scenario_1_infection <- which(total_days_claim1_is_false_scenario_1["days_OI_less_DI_infection",] > 0, TRUE))
+(claim1a_is_false_scenario_1_death <- which(total_days_claim1_is_false_scenario_1["days_OI_less_DI_death",] > 0, TRUE))
 
 # <IV> test whether Claim 1a holds under Scenario 4 ----------------------------
 ## (1) total days in which Claim 1a does not hold under Scenario 4
@@ -164,11 +164,11 @@ colnames(total_days_claim1a_is_false_scenario_4) <- 1:ndraws
 ## (2) Check no par gives unsuccessful numerical integration
 (no_integral_par_scenario_4 <- which(total_days_claim1a_is_false_scenario_4["flag",]!=0, TRUE))
 
-## (3) Check none of the LHS samples gives POE < PDE
-(claim1a_is_false_scenario_4_infection <- which(total_days_claim1a_is_false_scenario_4["days_POE_less_PDE_infection",] > 0, TRUE))
-(claim1a_is_false_scenario_4_death <- which(total_days_claim1a_is_false_scenario_4["days_POE_less_PDE_death",] > 0, TRUE))
+## (3) Check none of the LHS samples gives OI < DI
+(claim1a_is_false_scenario_4_infection <- which(total_days_claim1a_is_false_scenario_4["days_OI_less_DI_infection",] > 0, TRUE))
+(claim1a_is_false_scenario_4_death <- which(total_days_claim1a_is_false_scenario_4["days_OI_less_DI_death",] > 0, TRUE))
 
-# <V> Randomly draw 50 samples from LHS and plot PDEs and POEs ---------------
+# <V> Randomly draw 50 samples from LHS and plot DIs and OIs ---------------
 ## (1) randomly draw samples -------------------------------------------------
 set.seed(123)
 par_id <- 1:ndraws 
@@ -176,9 +176,9 @@ subsamples_id <- sample(par_id, size=50, replace = FALSE)
 subsamples <- parms_values[subsamples_id, ]
 subsamples <- cbind(subsamples, par_id=subsamples_id)
 
-## (2) get PDEs and POEs for plotting ----------------------------------------
-# a function to get PDE and POE for plotting 
-get_PDE_POE_for_plotting <- function(subpar){
+## (2) get DIs and OIs for plotting ----------------------------------------
+# a function to get DI and OI for plotting 
+get_DI_OI_for_plotting <- function(subpar){
   
   subpar <- unlist(subpar)
   
@@ -188,30 +188,30 @@ get_PDE_POE_for_plotting <- function(subpar){
   # simulate Scenario 1 under claim 1
   out_scenario_1 <- simulate_claims(subpar, claim_scenario="claim1_scenario1")
   
-  # get PDE and POE
-  PDE_POE_scenario_1 <- get_PDE_POE(out_scenario_1, alpha_hypothetical = ALPHA_HYPOTHETICAL, alpha_observed = ALPHA_OBSERVED) %>%
+  # get DI and OI
+  DI_OI_scenario_1 <- get_DI_OI(out_scenario_1, alpha_hypothetical = ALPHA_HYPOTHETICAL, alpha_observed = ALPHA_OBSERVED) %>%
     mutate(scenario = "Scenario 1",
            subpar_id = subpar["par_id"]) 
   
   # simulate scenario 4 under claim 1a
   out_scenario_4 <- simulate_claims(subpar, claim_scenario="claim1a_scenario4")
   
-  # get PDE and POE
-  PDE_POE_scenario_4 <- get_PDE_POE(out_scenario_4, alpha_hypothetical = 0, alpha_observed = ALPHA_OBSERVED) %>%
+  # get DI and OI
+  DI_OI_scenario_4 <- get_DI_OI(out_scenario_4, alpha_hypothetical = 0, alpha_observed = ALPHA_OBSERVED) %>%
     mutate(scenario = "Scenario 4",
            subpar_id = subpar["par_id"]) 
   
-  PDE_POE <- rbind(PDE_POE_scenario_1, PDE_POE_scenario_4)
-  return(PDE_POE)
+  DI_OI <- rbind(DI_OI_scenario_1, DI_OI_scenario_4)
+  return(DI_OI)
 }
 
 ### (3) plot
-df_PDE_POE_for_plotting <- apply(subsamples, 1, get_PDE_POE_for_plotting) 
+df_DI_OI_for_plotting <- apply(subsamples, 1, get_DI_OI_for_plotting) 
 
-df_PDE_POE_for_plotting <- do.call(rbind, df_PDE_POE_for_plotting)  
+df_DI_OI_for_plotting <- do.call(rbind, df_DI_OI_for_plotting)  
 
-df_PDE_POE_for_plotting_long <- df_PDE_POE_for_plotting %>% 
-  select(scenario, subpar_id, t, PDE_infection, PDE_death, POE_infection, POE_death) %>% 
+df_DI_OI_for_plotting_long <- df_DI_OI_for_plotting %>% 
+  select(scenario, subpar_id, t, DI_infection, DI_death, OI_infection, OI_death) %>% 
   pivot_longer(
     cols = -c("scenario","subpar_id", "t"),
     names_to = c("estimand", "outcome"),
@@ -219,11 +219,11 @@ df_PDE_POE_for_plotting_long <- df_PDE_POE_for_plotting %>%
     values_to = "count"
   )
 
-subsamples_PDE_POE_death <- ggplot() +
-  geom_line(data = df_PDE_POE_for_plotting_long %>% filter(outcome=="death"), aes(x = t, y= count, group = subpar_id), col="gray40", alpha=0.5, linewidth=0.25) +
+subsamples_DI_OI_death <- ggplot() +
+  geom_line(data = df_DI_OI_for_plotting_long %>% filter(outcome=="death"), aes(x = t, y= count, group = subpar_id), col="gray40", alpha=0.5, linewidth=0.25) +
   labs(tag=" ",
-       y= bquote(atop('POE'^'death'*~or
-                      ~'PDE'^'death')),
+       y= bquote(atop(delta^'O,death'*~or
+                      ~delta^'D,death')),
        x="Day") +
   facet_grid(scenario ~ estimand, switch = "y") +
   theme_bw() +
@@ -231,11 +231,11 @@ subsamples_PDE_POE_death <- ggplot() +
         zoom.x = element_rect(fill = "white", color = "black", linewidth = 0.25), 
         zoom.y = element_rect(fill = "white", color = "black", linewidth = 0.25)) 
 
-subsamples_PDE_POE_infection <- ggplot() +
-  geom_line(data = df_PDE_POE_for_plotting_long %>% filter(outcome=="infection"), aes(x = t, y= count, group = subpar_id), col="gray40", alpha=0.5, linewidth=0.25) +
+subsamples_DI_OI_infection <- ggplot() +
+  geom_line(data = df_DI_OI_for_plotting_long %>% filter(outcome=="infection"), aes(x = t, y= count, group = subpar_id), col="gray40", alpha=0.5, linewidth=0.25) +
   labs(tag=" ",
-       y= bquote(atop('POE'^'infection'*~or
-                      ~'PDE'^'infection')),
+       y= bquote(atop(delta^'O,infection'*~or
+                      ~delta^'D,infection')),
        x="Day") +
   facet_grid(scenario ~ estimand, switch = "y") +
   theme_bw() +
@@ -264,9 +264,9 @@ plotlist_eFig2 <-
   list(
     f = col1,
     g = col2,
-    h = subsamples_PDE_POE_infection,
-    i = subsamples_PDE_POE_death)
+    h = subsamples_DI_OI_infection,
+    i = subsamples_DI_OI_death)
 
-plot_subsamples_PDE_POE_labeled <- wrap_plots(plotlist_eFig2, guides = 'collect', design = layoutplot_eFig2) 
+plot_subsamples_DI_OI_labeled <- wrap_plots(plotlist_eFig2, guides = 'collect', design = layoutplot_eFig2) 
 
-ggsave("3_figures/eFig2.png", plot_subsamples_PDE_POE_labeled, width = 11, height=6, dpi=300, units="in")
+ggsave("3_figures/eFig2.png", plot_subsamples_DI_OI_labeled, width = 11, height=6, dpi=300, units="in")
